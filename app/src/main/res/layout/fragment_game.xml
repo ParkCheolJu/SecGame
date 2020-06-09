@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <ImageView
+        android:id="@+id/music_image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/music"
+        android:layout_margin="50dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/music_image"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <AutoCompleteTextView
+            android:id="@+id/answerTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="곡 제목을 입력해 주세요"
+            android:layout_marginLeft="30dp"
+            android:ems="10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+            android:id="@+id/replayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="다시듣기"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/answerTv"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/gameProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:max="5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/answer"
+        android:progressTint="@color/red"
+        android:progress="1"/>
+
+    <TextView
+        android:id="@+id/count_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" / 5"
+        android:textSize="25sp"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/gameProgress"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+
+    <TextView
+        android:id="@+id/pre_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이전"
+        android:textSize="25sp"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/gameProgress"
+        app:layout_constraintRight_toLeftOf="@id/count_progress"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/post_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다음"
+        android:textSize="25sp"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/gameProgress"
+        app:layout_constraintLeft_toRightOf="@id/count_progress"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
