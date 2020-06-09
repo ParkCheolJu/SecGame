@@ -59,9 +59,15 @@ public class MainActivity extends AppCompatActivity {
 
         final Music_RecyclerAdapter rAdapter = new Music_RecyclerAdapter(mp3List);
         musicList.setAdapter(rAdapter);
+        int index = 0;
 
+        String musicName="";
         File[] listFiles = new File(mp3Path).listFiles();
         String fileName, extName;
+
+        myHelper = new MyDBHelper(this);
+        musicDB = myHelper.getWritableDatabase();
+        myHelper.onUpgrade(musicDB,0,1);
 
         for (File file : listFiles) {
             fileName = file.getName();
@@ -69,16 +75,9 @@ public class MainActivity extends AppCompatActivity {
             if (extName.equals("mp3"))
                 mp3List.add(new MusicInfo(R.drawable.music, fileName));
             //DB처리
-            myHelper = new MyDBHelper(this);
-            musicDB = myHelper.getWritableDatabase();
-            myHelper.onUpgrade(musicDB,0,1);
-            for(int i = 0; i < rAdapter.getItemCount();i++){
-                musicDB.execSQL("INSERT INTO musicInfo(mIndex, mCustomName) VALUES ( ' " + i + "' , '" + fileName + "');");
-            }
-            musicDB.close();
+            musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + fileName + "' , '" + mp3Path+ fileName + "');");
         }
-
-
+        musicDB.close();
         mPlayer = new MediaPlayer();
 
         //recyclerView AdapterItemClickEvent
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //이것도 떼야해 - 음악일시정지
+    //음악일시정지
     public void onClick(View view){
         if(mPlayer.isPlaying()){
             mPlayer.pause();
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //떼보자 - 다이알로그
+    //다이알로그
     public void Dialog(View view){
         //난이도 하드코딩한거 바꿔
         final String[] Difficulty = {"쉬움 (5초}", "보통 (3초)", "어려움 (1초)"};
