@@ -27,6 +27,7 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public class MusicViewHolder extends RecyclerView.ViewHolder{
+
         ImageView musicLogo;
         TextView musicName;
         ImageButton musicPlay;
@@ -76,7 +77,7 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         musicViewHolder.musicName.setText(musicInfoArrayList.get(position).name);
     }
 
-    public MusicInfo getItem(int position){return musicInfoArrayList.get(position);}
+    public MusicInfo getItem(int position){ return musicInfoArrayList.get(position);}
 
     @Override
     public int getItemCount() {

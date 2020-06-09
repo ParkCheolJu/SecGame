@@ -3,6 +3,7 @@ package com.example.secgame;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,7 +33,10 @@ public class MainActivity extends AppCompatActivity {
     TextView musicTitle;
     ImageButton musicPlay;
     Thread thread;
+    MyDBHelper myHelper;
+    SQLiteDatabase musicDB;
 
+    //test용
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         //음악재생관련
         final ArrayList<MusicInfo> mp3List = new ArrayList<>();
 
+        final Music_RecyclerAdapter rAdapter = new Music_RecyclerAdapter(mp3List);
+        musicList.setAdapter(rAdapter);
+
         File[] listFiles = new File(mp3Path).listFiles();
         String fileName, extName;
 
@@ -61,10 +68,16 @@ public class MainActivity extends AppCompatActivity {
             extName = fileName.substring(fileName.length() - 3);
             if (extName.equals("mp3"))
                 mp3List.add(new MusicInfo(R.drawable.music, fileName));
+            //DB처리
+            myHelper = new MyDBHelper(this);
+            musicDB = myHelper.getWritableDatabase();
+            myHelper.onUpgrade(musicDB,0,1);
+            for(int i = 0; i < rAdapter.getItemCount();i++){
+                musicDB.execSQL("INSERT INTO musicInfo(mIndex, mCustomName) VALUES ( ' " + i + "' , '" + fileName + "');");
+            }
+            musicDB.close();
         }
 
-        final Music_RecyclerAdapter rAdapter = new Music_RecyclerAdapter(mp3List);
-        musicList.setAdapter(rAdapter);
 
         mPlayer = new MediaPlayer();
 
@@ -112,8 +125,7 @@ public class MainActivity extends AppCompatActivity {
             mPlayer.pause();
             musicPlay.setBackgroundResource(R.drawable.play);
         }
-        else
-        {
+        else{
             mPlayer.start();
             musicPlay.setBackgroundResource(R.drawable.pause);
         }
@@ -147,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 //난이도 넘겨주기
             }
         });
+
         builder.setNegativeButton("돌아가기", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
