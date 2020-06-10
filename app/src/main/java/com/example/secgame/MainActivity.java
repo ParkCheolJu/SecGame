@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(View v, int pos) {
                 try {
                     mPlayer.reset();
-                    MusicInfo selected = rAdapter.getItem(pos);
+                    final MusicInfo selected = rAdapter.getItem(pos);
                     mPlayer.setDataSource(mp3Path + selected.getName());
                     mPlayer.prepare();
                     mPlayer.start();
@@ -166,6 +167,33 @@ public class MainActivity extends AppCompatActivity {
                 gamePage.putStringArrayListExtra("items",items);
                 startActivity(gamePage);
                 //난이도 넘겨주기
+            }
+        });
+
+        builder.setNegativeButton("돌아가기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //창 닫기
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    public void customitem(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("수정");
+
+        builder.setMessage("곡 이름 : ");
+
+        final EditText ed = new EditText(MainActivity.this);
+        builder.setView(ed);
+
+        builder.setPositiveButton("수정하기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //수정하고 db에 반영하기
             }
         });
 
