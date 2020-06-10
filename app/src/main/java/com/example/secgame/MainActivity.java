@@ -33,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
     TextView musicTitle;
     ImageButton musicPlay;
     Thread thread;
-    MyDBHelper myHelper;
+    public MyDBHelper myHelper;
     SQLiteDatabase musicDB;
-
-    //test용
+    int index = 0;
+    int exam[];
+    ArrayList<String> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         musicPb = findViewById(R.id.music_progressbar);
         musicTitle = findViewById(R.id.music_title);
         musicPlay = findViewById(R.id.music_play);
+        items = new ArrayList<String>();
 
         //permission
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MODE_PRIVATE);
@@ -59,9 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Music_RecyclerAdapter rAdapter = new Music_RecyclerAdapter(mp3List);
         musicList.setAdapter(rAdapter);
-        int index = 0;
 
-        String musicName="";
         File[] listFiles = new File(mp3Path).listFiles();
         String fileName, extName;
 
@@ -72,10 +72,12 @@ public class MainActivity extends AppCompatActivity {
         for (File file : listFiles) {
             fileName = file.getName();
             extName = fileName.substring(fileName.length() - 3);
-            if (extName.equals("mp3"))
+            if (extName.equals("mp3")){
                 mp3List.add(new MusicInfo(R.drawable.music, fileName));
-            //DB처리
-            musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + fileName + "' , '" + mp3Path+ fileName + "');");
+                items.add(fileName);
+                //DB처리
+                musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + fileName + "' , '" + mp3Path+ fileName + "');");
+            }
         }
         musicDB.close();
         mPlayer = new MediaPlayer();
@@ -138,8 +140,12 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<Integer> selectedItem = new ArrayList<Integer>();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("난이도 설정");
-
         selectedItem.add(5);
+
+        //랜덤
+        CreateExam ce =new CreateExam();
+        exam = new int[5];
+        exam = ce.create();
 
         builder.setSingleChoiceItems(Difficulty, 0, new DialogInterface.OnClickListener() {
             @Override
@@ -153,7 +159,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent gamePage = new Intent(getApplicationContext(), GamePage.class);
+                gamePage.putExtra("DBsize",index-1);
                 gamePage.putExtra("sec",selectedItem.get(0));
+                gamePage.putExtra("exam",exam);
+                gamePage.putStringArrayListExtra("items",items);
                 startActivity(gamePage);
                 //난이도 넘겨주기
             }

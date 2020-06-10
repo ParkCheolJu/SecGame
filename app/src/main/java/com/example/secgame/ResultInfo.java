@@ -10,15 +10,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ResultInfo extends AppCompatActivity {
 
-    Button returnButton, checkButton;
+    Button checkButton, returnButton;
+    Intent resultPage;
+    String answer[];
+    String exam[];
+    String oX[];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result_score);
 
-        returnButton = findViewById(R.id.returnButton);
+        resultPage = getIntent();
+        answer = resultPage.getExtras().getStringArray("sec");
+        exam = resultPage.getExtras().getStringArray("exam");
+
+        //ox비교해서 넣는것부터 시작
+
         checkButton = findViewById(R.id.checkButton);
+        returnButton = findViewById(R.id.returnButton);
 
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override

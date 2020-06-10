@@ -12,7 +12,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE musicInfo (mIndex int PRIMARY KEY, mCustomName CHAR(30) , mAdress);");
+        db.execSQL("CREATE TABLE musicInfo (mIndex int PRIMARY KEY, mCustomName CHAR(30) , mAddress);");
     }
 
     @Override
