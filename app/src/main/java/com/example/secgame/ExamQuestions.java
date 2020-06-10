@@ -89,6 +89,7 @@ public class ExamQuestions extends Fragment {
                 }catch (IOException e){
 
                 }
+                activity.answer[num-1] = "";
             }
         });
 
@@ -106,7 +107,6 @@ public class ExamQuestions extends Fragment {
                 activity.answer[num-1] = answerTv.getText().toString();
             }
         });
-
 
         preTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +134,6 @@ public class ExamQuestions extends Fragment {
                 }
             }
         });
-
         return view;
     }
 }

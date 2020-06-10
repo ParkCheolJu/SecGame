@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <LinearLayout
+            android:id="@+id/resultcontainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/correct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="진짜 정답"
+                android:textSize="20sp"
+                android:layout_weight="3"/>
+
+            <TextView
+                android:id="@+id/userAnswer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사용자 정답"
+                android:textSize="20sp"
+                android:layout_weight="3"/>
+
+            <TextView
+                android:id="@+id/oorx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ox"
+                android:textSize="20sp"
+                android:layout_gravity="right"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

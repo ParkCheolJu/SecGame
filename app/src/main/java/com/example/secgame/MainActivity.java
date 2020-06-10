@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         //랜덤
         CreateExam ce =new CreateExam();
         exam = new int[5];
-        exam = ce.create();
+        exam = ce.create(index-1);
 
         builder.setSingleChoiceItems(Difficulty, 0, new DialogInterface.OnClickListener() {
             @Override
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("시작하기", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mPlayer.stop();
                 Intent gamePage = new Intent(getApplicationContext(), GamePage.class);
                 gamePage.putExtra("DBsize",index-1);
                 gamePage.putExtra("sec",selectedItem.get(0));

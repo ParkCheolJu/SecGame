@@ -56,13 +56,13 @@ public class GamePage extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[0]).commit();
 
         completeButton = findViewById(R.id.completeButton);
-
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent resultPage = new Intent(getApplicationContext(), ResultInfo.class);
                 resultPage.putExtra("answer", answer);
                 resultPage.putExtra("exam",exam);
+                resultPage.putStringArrayListExtra("items",items);
                 startActivity(resultPage);
                 finish();
             }
@@ -77,21 +77,11 @@ public class GamePage extends AppCompatActivity {
                 Toast.makeText(this, "이전 문제가 없습니다.", Toast.LENGTH_SHORT).show();break;
             case -2 :
                 Toast.makeText(this, "다음 문제가 없습니다.", Toast.LENGTH_SHORT).show();break;
-            case 0:
-                Toast.makeText(this,answer[0], Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[0]).commit();break;
-            case 1:
-                Toast.makeText(this,answer[1], Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[1]).commit();break;
-            case 2:
-                Toast.makeText(this,answer[2], Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[2]).commit();break;
-            case 3:
-                Toast.makeText(this,answer[3], Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[3]).commit();break;
-            case 4:
-                Toast.makeText(this,answer[4], Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[4]).commit();break;
+            case 0:fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[0]).commit();break;
+            case 1: fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[1]).commit();break;
+            case 2: fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[2]).commit();break;
+            case 3:fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[3]).commit();break;
+            case 4:fragmentManager.beginTransaction().replace(R.id.gamePage, gamePage[4]).commit();break;
             default: finish();
         }
     }
