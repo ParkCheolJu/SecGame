@@ -44,12 +44,12 @@ public class ExamQuestions extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
-        playButton = (Button)view.findViewById(R.id.playButton);
-        preTv = (TextView)view.findViewById(R.id.pre_button);
-        postTv = (TextView)view.findViewById(R.id.post_button);
-        countProgress = (TextView)view.findViewById(R.id.count_progress);
-        gameProgress = (ProgressBar)view.findViewById(R.id.gameProgress);
-        answerTv = (AutoCompleteTextView)view.findViewById(R.id.answerTv);
+        playButton = view.findViewById(R.id.playButton);
+        preTv = view.findViewById(R.id.pre_button);
+        postTv = view.findViewById(R.id.post_button);
+        countProgress = view.findViewById(R.id.count_progress);
+        gameProgress = view.findViewById(R.id.gameProgress);
+        answerTv = view.findViewById(R.id.answerTv);
         activity = (GamePage)getActivity();
 
         myHelper = activity.myHelper;

@@ -3,7 +3,6 @@ package com.example.secgame;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,14 +29,12 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         ImageView musicLogo;
         TextView musicName;
-        ImageButton musicPlay;
 
         public MusicViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             musicLogo = itemView.findViewById(R.id.music_logo);
             musicName = itemView.findViewById(R.id.music_name);
-            musicPlay = itemView.findViewById(R.id.music_play);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
