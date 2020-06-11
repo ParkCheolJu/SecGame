@@ -3,14 +3,19 @@ package com.example.secgame;
 public class MusicInfo {
 
     public int drawableId;
-    public String name;
+    public String customName, address;
 
-    public MusicInfo(int drawableId, String name){
+    public MusicInfo(int drawableId, String customName, String address){
         this.drawableId = drawableId;
-        this.name = name;
+        this.customName = customName;
+        this.address = address;
     }
 
     public String getName(){
-        return name;
+        return customName;
+    }
+
+    public String getAddress(){
+        return address;
     }
 }

@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     int index = 0;
     int exam[];
     ArrayList<String> items;
+    Music_RecyclerAdapter rAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +62,12 @@ public class MainActivity extends AppCompatActivity {
         //음악재생관련
         final ArrayList<MusicInfo> mp3List = new ArrayList<>();
 
-        final Music_RecyclerAdapter rAdapter = new Music_RecyclerAdapter(mp3List);
+        rAdapter = new Music_RecyclerAdapter(mp3List);
         musicList.setAdapter(rAdapter);
 
         File[] listFiles = new File(mp3Path).listFiles();
         String fileName, extName;
-
+        //여기서부터 고쳐야함
         myHelper = new MyDBHelper(this);
         musicDB = myHelper.getWritableDatabase();
         myHelper.onUpgrade(musicDB,0,1);
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             fileName = file.getName();
             extName = fileName.substring(fileName.length() - 3);
             if (extName.equals("mp3")){
-                mp3List.add(new MusicInfo(R.drawable.music, fileName));
+                mp3List.add(new MusicInfo(R.drawable.music, fileName, mp3Path + fileName));
                 items.add(fileName);
                 //DB처리
                 musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + fileName + "' , '" + mp3Path+ fileName + "');");
@@ -89,12 +92,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     mPlayer.reset();
                     MusicInfo selected = rAdapter.getItem(pos);
-                    mPlayer.setDataSource(mp3Path + selected.getName());
+                    mPlayer.setDataSource(selected.getAddress());
                     mPlayer.prepare();
                     mPlayer.start();
                     musicPb.setMax(mPlayer.getDuration());
                     musicTitle.setText("재생중인 음악 : "+ selected.getName());
-                    //이부분은 도려내보자
                     thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -116,6 +118,33 @@ public class MainActivity extends AppCompatActivity {
                     //여기까지
                 } catch (IOException e) {
                 }
+            }
+
+            @Override
+            public void onItemLongClick(View v, int pos) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                final String name = rAdapter.getItem(pos).getName();
+                builder.setMessage("수정");
+                final int position = pos;
+                final EditText ed = new EditText(MainActivity.this);
+                builder.setView(ed);
+                ed.setText(name);
+
+                builder.setPositiveButton("수정하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newName = ed.getText().toString();
+                        MusicInfo musicInfo = new MusicInfo(R.drawable.music,newName, name);
+                        rAdapter.musicInfoArrayList.set(position, musicInfo);
+                        rAdapter.notifyItemChanged(position);
+                        musicDB = myHelper.getWritableDatabase();
+                        musicDB.execSQL("UPDATE musicInfo SET mCustomName = '" + newName + "' WHERE mIndex = " + position+";");
+                        musicDB.close();
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
     }
@@ -158,14 +187,19 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("시작하기", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mPlayer.stop();
-                Intent gamePage = new Intent(getApplicationContext(), GamePage.class);
-                gamePage.putExtra("DBsize",index-1);
-                gamePage.putExtra("sec",selectedItem.get(0));
-                gamePage.putExtra("exam",exam);
-                gamePage.putStringArrayListExtra("items",items);
-                startActivity(gamePage);
-                //난이도 넘겨주기
+                if(rAdapter.getItemCount()<5)
+                {
+                    //문항수가 너무 적은 경우
+                    Toast.makeText(MainActivity.this, "음악이 너무 적습니다.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    mPlayer.stop();
+                    Intent gamePage = new Intent(getApplicationContext(), GamePage.class);
+                    gamePage.putExtra("DBsize",index-1);
+                    gamePage.putExtra("sec",selectedItem.get(0));
+                    gamePage.putExtra("exam",exam);
+                    gamePage.putStringArrayListExtra("items",items);
+                    startActivity(gamePage);}
             }
         });
 

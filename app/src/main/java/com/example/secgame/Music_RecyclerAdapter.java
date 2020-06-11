@@ -13,13 +13,16 @@ import java.util.ArrayList;
 
 public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+
+    ArrayList<MusicInfo> musicInfoArrayList;
+    //리스너 객체를 저장하는 변수
+    private OnItemClickListener mListener = null;
+
     //외부에서 클릭이벤트를 처리하기위한 인터페이스
     public interface OnItemClickListener{
         void onItemClick(View v, int pos);
+        void onItemLongClick(View v, int pos);
     }
-
-    //리스너 객체를 저장하는 변수
-    private OnItemClickListener mListener = null;
 
     public void setOnItemClickListener(OnItemClickListener listener){
         this.mListener = listener;
@@ -35,7 +38,7 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             musicLogo = itemView.findViewById(R.id.music_logo);
             musicName = itemView.findViewById(R.id.music_name);
-
+            //클릭이벤트
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -47,10 +50,22 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     }
                 }
             });
+            //long클릭 이벤트
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION){
+                        if(mListener!= null){
+                            mListener.onItemLongClick(v,pos);
+                        }
+                    }
+                    return false;
+                }
+            });
         }
     }
 
-    private ArrayList<MusicInfo> musicInfoArrayList;
     Music_RecyclerAdapter(ArrayList<MusicInfo> musicInfoArrayList){
         this.musicInfoArrayList = musicInfoArrayList;
     }
@@ -71,7 +86,7 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         MusicInfo item = musicInfoArrayList.get(position);
 
         musicViewHolder.musicLogo.setImageResource(musicInfoArrayList.get(position).drawableId);
-        musicViewHolder.musicName.setText(musicInfoArrayList.get(position).name);
+        musicViewHolder.musicName.setText(musicInfoArrayList.get(position).customName);
     }
 
     public MusicInfo getItem(int position){ return musicInfoArrayList.get(position);}
