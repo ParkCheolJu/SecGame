@@ -59,7 +59,7 @@ public class ExamQuestions extends Fragment {
         countProgress.setText(num+" / 5");
         gameProgress.setProgress(num);
 
-        mPlayer = new MediaPlayer();
+        activity.mPlayer= this.mPlayer = new MediaPlayer();
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override

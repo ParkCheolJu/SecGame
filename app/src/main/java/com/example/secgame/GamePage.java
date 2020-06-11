@@ -1,6 +1,7 @@
 package com.example.secgame;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -25,6 +26,7 @@ public class GamePage extends AppCompatActivity {
     ArrayList<String> items;
     ArrayAdapter<String> adapter;
     MyDBHelper myHelper;
+    MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class GamePage extends AppCompatActivity {
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPlayer.stop();
                 Intent resultPage = new Intent(getApplicationContext(), ResultInfo.class);
                 resultPage.putExtra("answer", answer);
                 resultPage.putExtra("exam",exam);

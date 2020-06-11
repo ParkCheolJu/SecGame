@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ public class ResultInfo extends AppCompatActivity {
     String[] correctAnswer, oX;
     int correct;
     ArrayList<String> items;
+    ImageView resultImage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +37,8 @@ public class ResultInfo extends AppCompatActivity {
         oX = new String[5];
 
         //하드코딩
-        String comment[] = {"야 가서 다시듣고와", "하나? 고작 하나?", "그래도 음악을 조금 듣긴했네", "반타작 네이스~", "이정도면 엄청 잘한거지", "변태"};
+        String comment[] = {"0점인데 솔루션을 어떻게줘", "하나? 고작 하나?", "그래도 음악을 조금 듣긴했네유", "한 주만 더 노력해봅시다", "이정도면 엄청 잘한거지", "이집 맛있네"};
+        int image[] = {R.drawable.score0, R.drawable.score1, R.drawable.score2, R.drawable.score3, R.drawable.score4, R.drawable.score5 };
 
         correct = 0;
         //채점점
@@ -53,6 +56,9 @@ public class ResultInfo extends AppCompatActivity {
         returnButton = findViewById(R.id.returnButton);
         resultCount = findViewById(R.id.result_count);
         resultComment = findViewById(R.id.result_comment);
+        resultImage = findViewById(R.id.result_image);
+
+        resultImage.setImageResource(image[correct]);
 
         resultCount.setText("결과 : " + correct + " / 5");
         resultComment.setText(comment[correct]);
