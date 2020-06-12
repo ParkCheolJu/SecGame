@@ -134,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String newName = ed.getText().toString();
-                        MusicInfo musicInfo = new MusicInfo(R.drawable.music,newName, name);
+                        MusicInfo musicInfo = new MusicInfo(R.drawable.music,newName, mp3Path + name);
+                        items.set(position,newName);
                         rAdapter.musicInfoArrayList.set(position, musicInfo);
                         rAdapter.notifyItemChanged(position);
                         musicDB = myHelper.getWritableDatabase();
