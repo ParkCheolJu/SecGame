@@ -24,6 +24,10 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         void onItemLongClick(View v, int pos);
     }
 
+    Music_RecyclerAdapter(ArrayList<MusicInfo> musicInfoArrayList){
+        this.musicInfoArrayList = musicInfoArrayList;
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener){
         this.mListener = listener;
     }
@@ -66,10 +70,6 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    Music_RecyclerAdapter(ArrayList<MusicInfo> musicInfoArrayList){
-        this.musicInfoArrayList = musicInfoArrayList;
-    }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -85,8 +85,8 @@ public class Music_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         MusicInfo item = musicInfoArrayList.get(position);
 
-        musicViewHolder.musicLogo.setImageResource(musicInfoArrayList.get(position).drawableId);
-        musicViewHolder.musicName.setText(musicInfoArrayList.get(position).customName);
+        musicViewHolder.musicLogo.setImageResource(musicInfoArrayList.get(position).getDrawableId());
+        musicViewHolder.musicName.setText(musicInfoArrayList.get(position).getName());
     }
 
     public MusicInfo getItem(int position){ return musicInfoArrayList.get(position);}

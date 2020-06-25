@@ -2,14 +2,16 @@ package com.example.secgame;
 
 public class MusicInfo {
 
-    public int drawableId;
-    public String customName, address;
+    private int drawableId;
+    private String customName, address;
 
     public MusicInfo(int drawableId, String customName, String address){
         this.drawableId = drawableId;
         this.customName = customName;
         this.address = address;
     }
+
+    public int getDrawableId(){ return drawableId; }
 
     public String getName(){
         return customName;

@@ -37,10 +37,11 @@ public class MainActivity extends AppCompatActivity {
     Thread thread;
     public MyDBHelper myHelper;
     SQLiteDatabase musicDB;
-    int index = 0;
+    int index, version;
     int exam[];
     ArrayList<String> items;
     Music_RecyclerAdapter rAdapter;
+    ArrayList<MusicInfo> mp3List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,32 +58,17 @@ public class MainActivity extends AppCompatActivity {
         musicPlay = findViewById(R.id.music_play);
         items = new ArrayList<String>();
 
-        //permission
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MODE_PRIVATE);
-        //음악재생관련
-        final ArrayList<MusicInfo> mp3List = new ArrayList<>();
+        myHelper = new MyDBHelper(this);
+        musicDB = myHelper.getWritableDatabase();
 
+        mp3List = new ArrayList<>();
         rAdapter = new Music_RecyclerAdapter(mp3List);
         musicList.setAdapter(rAdapter);
 
-        File[] listFiles = new File(mp3Path).listFiles();
-        String fileName, extName;
-        //여기서부터 고쳐야함
-        myHelper = new MyDBHelper(this);
-        musicDB = myHelper.getWritableDatabase();
-        myHelper.onUpgrade(musicDB,0,1);
+        //permission
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MODE_PRIVATE);
 
-        for (File file : listFiles) {
-            fileName = file.getName();
-            extName = fileName.substring(fileName.length() - 3);
-            if (extName.equals("mp3")){
-                mp3List.add(new MusicInfo(R.drawable.music, fileName, mp3Path + fileName));
-                items.add(fileName);
-                //DB처리
-                musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + fileName + "' , '" + mp3Path+ fileName + "');");
-            }
-        }
-        musicDB.close();
+
         mPlayer = new MediaPlayer();
 
         //recyclerView AdapterItemClickEvent
@@ -160,6 +146,29 @@ public class MainActivity extends AppCompatActivity {
             mPlayer.start();
             musicPlay.setBackgroundResource(R.drawable.pause);
         }
+    }
+
+    public void LoadMusic(View view){
+        musicDB = myHelper.getWritableDatabase();
+        myHelper.onUpgrade(musicDB,version,++version);
+
+        mp3List.clear();
+
+        File[] listFiles = new File(mp3Path).listFiles();
+        String fileName, extName;
+
+        for (File file : listFiles) {
+            fileName = file.getName();
+            extName = fileName.substring(fileName.length() - 3);
+            if (extName.equals("mp3")){
+                mp3List.add(new MusicInfo(R.drawable.music, fileName, mp3Path + fileName));
+                items.add(fileName);
+                //DB처리
+                musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + fileName + "' , '" + mp3Path+ fileName + "');");
+            }
+        }
+        musicDB.close();
+        rAdapter.notifyDataSetChanged();
     }
 
     //다이알로그
