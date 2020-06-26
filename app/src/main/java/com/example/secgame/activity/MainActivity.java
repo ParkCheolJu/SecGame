@@ -1,13 +1,16 @@
-package com.example.secgame;
+package com.example.secgame.activity;
 
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,27 +24,39 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.secgame.application.CreateExam;
+import com.example.secgame.dto.MusicInfo;
+import com.example.secgame.adapter.Music_RecyclerAdapter;
+import com.example.secgame.database.MyDBHelper;
+import com.example.secgame.R;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    //music 리사이클러뷰 관련
     RecyclerView musicList;
     RecyclerView.LayoutManager layoutManager;
+    Music_RecyclerAdapter rAdapter;
+    ArrayList<MusicInfo> mp3List;
+
+    //데이터베이스 관련
     String mp3Path = Environment.getExternalStorageDirectory().getPath() + "/Music/";
+    public MyDBHelper myHelper;
+    SQLiteDatabase musicDB;
+
+    //mediaplayer관련
     ProgressBar musicPb;
+    Thread thread;
     MediaPlayer mPlayer;
     TextView musicTitle;
     ImageButton musicPlay;
-    Thread thread;
-    public MyDBHelper myHelper;
-    SQLiteDatabase musicDB;
+
     int index, version;
     int exam[];
     ArrayList<String> items;
-    Music_RecyclerAdapter rAdapter;
-    ArrayList<MusicInfo> mp3List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +83,24 @@ public class MainActivity extends AppCompatActivity {
         //permission
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MODE_PRIVATE);
 
-
         mPlayer = new MediaPlayer();
 
+        musicDB = myHelper.getWritableDatabase();
+        Cursor cursor = musicDB.rawQuery("Select * from musicInfo;", null);
+
+        items.clear();
+
+        while(cursor.moveToNext()){
+            String name = cursor.getString(1);
+            String address = cursor.getString(2);
+            mp3List.add(new MusicInfo(R.drawable.music, name, address));
+            items.add(name);
+            index++;
+        }
+
+        rAdapter.notifyDataSetChanged();
+
+        musicDB.close();
         //recyclerView AdapterItemClickEvent
         rAdapter.setOnItemClickListener(new Music_RecyclerAdapter.OnItemClickListener() {
             @Override
@@ -107,11 +137,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemLongClick(View v, int pos) {
+            public void onItemLongClick(View v, final int pos) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 final String name = rAdapter.getItem(pos).getName();
                 builder.setMessage("수정");
-                final int position = pos;
                 final EditText ed = new EditText(MainActivity.this);
                 builder.setView(ed);
                 ed.setText(name);
@@ -120,16 +149,34 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String newName = ed.getText().toString();
-                        MusicInfo musicInfo = new MusicInfo(R.drawable.music,newName, mp3Path + name);
-                        items.set(position,newName);
-                        rAdapter.musicInfoArrayList.set(position, musicInfo);
-                        rAdapter.notifyItemChanged(position);
-                        musicDB = myHelper.getWritableDatabase();
-                        musicDB.execSQL("UPDATE musicInfo SET mCustomName = '" + newName + "' WHERE mIndex = " + position+";");
+                        items.set(pos,newName);
+                        rAdapter.getItem(pos).setCustomName(newName);
+                        rAdapter.notifyDataSetChanged();
+                        musicDB = myHelper.getWritableDatabase() ;
+                        musicDB.execSQL("UPDATE musicInfo SET mCustomName = '" + newName + "' WHERE mIndex = " + pos+";");
                         musicDB.close();
                         dialog.dismiss();
                     }
                 });
+
+                builder.setNegativeButton("삭제하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        items.remove(pos);
+                        mp3List.remove(pos);
+                        rAdapter.notifyItemRangeChanged(pos, items.size());
+                        musicDB = myHelper.getWritableDatabase() ;
+                        musicDB.execSQL("DELETE FROM musicInfo WHERE mCustomName = '" + name+"';");
+                        musicDB.close();
+                        index--;
+                            for(int i = 0; i < items.size();i++){
+                                String n = items.get(i);
+                                Log.d("test", n);
+
+                        }
+                    }
+                });
+
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
@@ -153,18 +200,21 @@ public class MainActivity extends AppCompatActivity {
         myHelper.onUpgrade(musicDB,version,++version);
 
         mp3List.clear();
+        index = 0;
+        items.clear();
 
         File[] listFiles = new File(mp3Path).listFiles();
-        String fileName, extName;
+        String fileName, extName, customName;
 
         for (File file : listFiles) {
             fileName = file.getName();
             extName = fileName.substring(fileName.length() - 3);
+            customName = fileName.substring(0,fileName.length()-4);
             if (extName.equals("mp3")){
-                mp3List.add(new MusicInfo(R.drawable.music, fileName, mp3Path + fileName));
-                items.add(fileName);
+                mp3List.add(new MusicInfo(R.drawable.music, customName, mp3Path + fileName));
+                items.add(customName);
                 //DB처리
-                musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + fileName + "' , '" + mp3Path+ fileName + "');");
+                musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + customName + "' , '" + mp3Path+ fileName + "');");
             }
         }
         musicDB.close();
@@ -178,13 +228,8 @@ public class MainActivity extends AppCompatActivity {
         final Integer[] sec = {5,3,1};
         final ArrayList<Integer> selectedItem = new ArrayList<Integer>();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("난이도 설정");
+        builder.setTitle(Html.fromHtml("<font color='#F44336'>시작하기</font>"));
         selectedItem.add(5);
-
-        //랜덤
-        CreateExam ce =new CreateExam();
-        exam = new int[5];
-        exam = ce.create(index-1);
 
         builder.setSingleChoiceItems(Difficulty, 0, new DialogInterface.OnClickListener() {
             @Override
@@ -194,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setPositiveButton("시작하기", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(Html.fromHtml("<font color='#F44336'>시작하기</font>"), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(rAdapter.getItemCount()<5)
@@ -203,6 +248,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "음악이 너무 적습니다.", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    //랜덤
+                    CreateExam ce =new CreateExam();
+                    exam = new int[5];
+                    exam = ce.create(index-1);
+
                     mPlayer.stop();
                     Intent gamePage = new Intent(getApplicationContext(), GamePage.class);
                     gamePage.putExtra("DBsize",index-1);
@@ -213,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("돌아가기", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(Html.fromHtml("<font color='#FF7171'>돌아가기</font>"), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //창 닫기
@@ -222,5 +272,12 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPlayer.stop();
+        musicPlay.setBackgroundResource(R.drawable.play);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.secgame;
+package com.example.secgame.dto;
 
 public class MusicInfo {
 
@@ -19,5 +19,17 @@ public class MusicInfo {
 
     public String getAddress(){
         return address;
+    }
+
+    public void setDrawableId(int drawableId) {
+        this.drawableId = drawableId;
+    }
+
+    public void setCustomName(String customName) {
+        this.customName = customName;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

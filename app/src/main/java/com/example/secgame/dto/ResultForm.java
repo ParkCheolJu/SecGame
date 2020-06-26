@@ -1,4 +1,4 @@
-package com.example.secgame;
+package com.example.secgame.dto;
 
 public class ResultForm {
 

@@ -1,16 +1,16 @@
-package com.example.secgame;
+package com.example.secgame.application;
 
 import java.util.Random;
 
 public class CreateExam {
 
-    int exam[];
+    private int exam[];
 
-    CreateExam(){
+    public CreateExam(){
         exam = new int[5];
     }
 
-    int[] create(int dbsize){
+    public int[] create(int dbsize){
         Random rnd = new Random();
 
         for(int i = 0; i < 5 ; i++){

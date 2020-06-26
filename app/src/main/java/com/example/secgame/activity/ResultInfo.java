@@ -1,5 +1,6 @@
-package com.example.secgame;
+package com.example.secgame.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,11 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.secgame.R;
 
 import java.util.ArrayList;
 
-public class ResultInfo extends AppCompatActivity {
+public class ResultInfo extends Activity {
 
     Button checkButton, returnButton;
     TextView resultCount, resultComment;
@@ -28,6 +30,7 @@ public class ResultInfo extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result_score);
+        setTitle("결과");
 
         resultPage = getIntent();
         answer = resultPage.getExtras().getStringArray("answer");

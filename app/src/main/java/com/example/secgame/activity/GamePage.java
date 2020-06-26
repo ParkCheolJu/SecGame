@@ -1,4 +1,4 @@
-package com.example.secgame;
+package com.example.secgame.activity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -12,6 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.secgame.database.MyDBHelper;
+import com.example.secgame.R;
+import com.example.secgame.fragment.ExamQuestions;
+
 import java.util.ArrayList;
 
 public class GamePage extends AppCompatActivity {
@@ -21,17 +25,18 @@ public class GamePage extends AppCompatActivity {
     Intent game;
     int sec, dbSize;
     int exam[];
-    String answer[];
+    public String[] answer;
     FragmentManager fragmentManager;
     ArrayList<String> items;
-    ArrayAdapter<String> adapter;
-    MyDBHelper myHelper;
-    MediaPlayer mPlayer;
+    public ArrayAdapter<String> adapter;
+    public MyDBHelper myHelper;
+    public MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.framepage);
+        setTitle("문제");
 
         //액티비티 통신
         game = getIntent();

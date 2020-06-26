@@ -12,28 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage="true">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GamePage">
+        <activity android:name=".activity.GamePage">
             <intent-filter>
                 <action android:name="android.intent.action.GAME" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResultPage">
+        <activity android:name=".activity.ResultPage">
             <intent-filter>
                 <action android:name="android.intent.action.RESULT" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResultInfo"/>
+        <activity android:name=".activity.ResultInfo"/>
     </application>
 
 </manifest>

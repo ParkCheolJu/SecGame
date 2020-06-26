@@ -14,22 +14,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@id/completeButton"/>
 
-<!--    <fragment-->
-<!--        android:name="com.example.secgame.ExamQuestions"-->
-<!--        android:id="@+id/gamePage"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_margin="15dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/completeButton"/>-->
-
     <Button
         android:id="@+id/completeButton"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="제출하기"
         android:layout_margin="30dp"
+        android:textColor="@color/white"
+        android:background="@drawable/button_round"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 

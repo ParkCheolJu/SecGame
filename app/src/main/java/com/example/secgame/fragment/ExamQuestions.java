@@ -1,4 +1,4 @@
-package com.example.secgame;
+package com.example.secgame.fragment;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,6 +18,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.secgame.R;
+import com.example.secgame.activity.GamePage;
+import com.example.secgame.database.MyDBHelper;
+
 import java.io.IOException;
 
 public class ExamQuestions extends Fragment {
@@ -32,7 +36,7 @@ public class ExamQuestions extends Fragment {
     SQLiteDatabase musicDB;
     MediaPlayer mPlayer;
 
-    ExamQuestions(int num, int testNum, int sec){
+    public ExamQuestions(int num, int testNum, int sec){
         this.num = num;
         this.testNum = testNum;
         this.sec = sec;
@@ -66,10 +70,15 @@ public class ExamQuestions extends Fragment {
             public void onClick(View v) {
                 musicDB = myHelper.getReadableDatabase();
                 Cursor cursor;
-                String query = "SELECT mAddress FROM musicInfo WHERE mIndex = " + testNum + ";";
+                String mp3 = null;
+                String query = "SELECT mAddress FROM musicInfo";
                 cursor = musicDB.rawQuery(query,null);
-                cursor.moveToNext();
-                String mp3 = cursor.getString(0);
+                while(cursor.moveToNext()){
+                    if(cursor.getPosition() == testNum){
+                        mp3 = cursor.getString(0);
+                        break;
+                    }
+                }
                 musicDB.close();
                 try {
                     mPlayer.reset();

@@ -1,4 +1,4 @@
-package com.example.secgame;
+package com.example.secgame.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.secgame.R;
+import com.example.secgame.adapter.ResultRecyclerAdapter;
 
 public class ResultPage extends Activity {
 
@@ -23,6 +26,7 @@ public class ResultPage extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result_info);
+        setTitle("결과");
 
         resultPage = getIntent();
         ox = resultPage.getStringArrayExtra("ox");

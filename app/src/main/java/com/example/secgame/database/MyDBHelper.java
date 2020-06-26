@@ -1,4 +1,4 @@
-package com.example.secgame;
+package com.example.secgame.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDBHelper extends SQLiteOpenHelper {
 
-    MyDBHelper(Context context){
+    public MyDBHelper(Context context){
         super(context, "musicDB", null, 1);
     }
 

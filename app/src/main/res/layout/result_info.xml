@@ -3,31 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
-    <TextView
-        android:id="@+id/resultTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="결과 "
-        android:textSize="45sp"
-        android:layout_margin="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/resultcontainer"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/gray"
-        app:layout_constraintTop_toBottomOf="@id/resultTitle"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="5dp"
+        android:background="@drawable/button_round">
+
+        <TextView
+            android:id="@+id/correct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="진짜 정답"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:ems="1"
+            android:layout_weight="3"/>
+
+        <TextView
+            android:id="@+id/userAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용자 정답"
+            android:textColor="@color/white"
+            android:ems="1"
+            android:textSize="15sp"
+            android:layout_weight="3"/>
+
+        <TextView
+            android:id="@+id/oorx"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="ox"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyvle_result"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="vertical"
-        android:padding="20dp"
-        app:layout_constraintTop_toBottomOf="@id/resultTitle"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toBottomOf="@id/resultcontainer"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
 
@@ -38,6 +62,8 @@
         android:text="돌아가기"
         android:layout_margin="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="@color/white"
+        android:background="@drawable/button_round"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
