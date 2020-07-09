@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -30,7 +31,6 @@ import com.example.secgame.adapter.Music_RecyclerAdapter;
 import com.example.secgame.database.MyDBHelper;
 import com.example.secgame.R;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("노래 목록");
 
         musicList = findViewById(R.id.music_recyclerview);
         musicList.setHasFixedSize(true);
@@ -195,35 +194,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void LoadMusic(View view){
-        musicDB = myHelper.getWritableDatabase();
-        myHelper.onUpgrade(musicDB,version,++version);
-
-        mp3List.clear();
-        index = 0;
-        items.clear();
-
-        File[] listFiles = new File(mp3Path).listFiles();
-        String fileName, extName, customName;
-
-        for (File file : listFiles) {
-            fileName = file.getName();
-            extName = fileName.substring(fileName.length() - 3);
-            customName = fileName.substring(0,fileName.length()-4);
-            if (extName.equals("mp3")){
-                mp3List.add(new MusicInfo(R.drawable.music, customName, mp3Path + fileName));
-                items.add(customName);
-                //DB처리
-                musicDB.execSQL("INSERT INTO musicInfo VALUES ( ' " + index++ + "' , '" + customName + "' , '" + mp3Path+ fileName + "');");
-            }
-        }
-        musicDB.close();
-        rAdapter.notifyDataSetChanged();
+    public void SearchMusic(View view){
+//        Intent searchPage = new Intent(getApplicationContext(), MusicSearch.class);
+//        startActivityForResult(searchPage, 1);
     }
 
     //다이알로그
     public void Dialog(View view){
-        //난이도 하드코딩한거 바꿔
         final String[] Difficulty = {"쉬움 (5초}", "보통 (3초)", "어려움 (1초)"};
         final Integer[] sec = {5,3,1};
         final ArrayList<Integer> selectedItem = new ArrayList<Integer>();
@@ -279,5 +256,18 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         mPlayer.stop();
         musicPlay.setBackgroundResource(R.drawable.play);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 1:
+                ; //이부분에 검색결과를 리스트에 추가하고 디베에 넣는 부분
+                break;
+            default:
+                ;
+                break;
+        }
     }
 }
